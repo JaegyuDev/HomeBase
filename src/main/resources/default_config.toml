@@ -1,0 +1,19 @@
+[features.enchantments]
+harvesting = true
+
+[features.mobs]
+disable_creeper_griefing = true
+creeper_fire_ignite = true
+return_to_sender_loot = true
+
+[features.backup]
+enabled = true
+onDeath = true
+onBoot = true
+
+[features.commands]
+homebase = true
+
+# this is just to show what's all in the plugin, not actually a config setting
+#[featues.not_togglable]
+#bedrock_armorstands = true
