@@ -70,6 +70,12 @@ public class HarvestingEnchant {
         return 1.0 + (BONUS_PER_LEVEL * level);
     }
 
+    public static boolean isHoe(Material mat) {
+        return mat == Material.WOODEN_HOE || mat == Material.STONE_HOE
+                || mat == Material.IRON_HOE || mat == Material.GOLDEN_HOE
+                || mat == Material.DIAMOND_HOE || mat == Material.NETHERITE_HOE;
+    }
+
     private static String toRoman(int n) {
         return switch (n) {
             case 1 -> "I";

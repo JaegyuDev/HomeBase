@@ -95,7 +95,7 @@ public class PDBackupManager {
             } catch (IOException e) {
                 plugin.getLogger().severe("[Backup] Restore failed for " + uuid + ": " + e.getMessage());
             }
-        }, 40L); // 2 seconds, just to test
+        }, 40L); // 2-second delay (40 ticks)
     }
 
     /**

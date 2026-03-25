@@ -10,8 +10,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.loot.LootContext;
-import org.bukkit.loot.LootTable;
 
 import java.util.Collection;
 import java.util.Random;

@@ -46,7 +46,7 @@ public class HomeCommand implements CommandExecutor {
 
         Location respawn = player.getRespawnLocation();
         if (respawn == null) {
-            sender.sendMessage("Cannot obtain your repawn location :(!");
+            sender.sendMessage("Cannot obtain your respawn location :(!");
             sender.sendMessage("Make sure you've slept in a bed or used a respawn anchor!");
             return true;
         }

@@ -25,7 +25,7 @@ public class AnvilListener implements Listener {
         ItemStack right = inv.getItem(1);  // book
 
         if (left == null || right == null) return;
-        if (!isHoe(left.getType())) return;
+        if (!HarvestingEnchant.isHoe(left.getType())) return;
         if (right.getType() != Material.ENCHANTED_BOOK) return;
 
         int bookLevel = HarvestingEnchant.getLevel(right);
@@ -51,11 +51,5 @@ public class AnvilListener implements Listener {
 
         // Set a repair cost so the anvil charges levels
         inv.setRepairCost(bookLevel * 3);
-    }
-
-    private boolean isHoe(Material mat) {
-        return mat == Material.WOODEN_HOE || mat == Material.STONE_HOE
-                || mat == Material.IRON_HOE || mat == Material.GOLDEN_HOE
-                || mat == Material.DIAMOND_HOE || mat == Material.NETHERITE_HOE;
     }
 }

@@ -22,7 +22,7 @@ public class VillagerTradeListener implements Listener {
 
     private static final Random RANDOM = new Random();
     private final ConfigManager configManager;
-    private Plugin plugin;
+    private final Plugin plugin;
 
     public VillagerTradeListener(Plugin plugin, ConfigManager configManager) {
         this.configManager = configManager;

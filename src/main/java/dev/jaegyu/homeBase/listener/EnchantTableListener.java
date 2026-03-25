@@ -23,7 +23,7 @@ public class EnchantTableListener implements Listener {
         if (!configManager.isHarvestingEnabled()) return;
 
         ItemStack item = event.getItem();
-        if (!isHoe(item.getType())) return;
+        if (!HarvestingEnchant.isHoe(item.getType())) return;
 
         // ~30% chance to get Harvesting when enchanting a hoe
         if (RANDOM.nextDouble() > 0.30) return;
@@ -39,9 +39,4 @@ public class EnchantTableListener implements Listener {
         HarvestingEnchant.setLevel(item, level);
     }
 
-    private boolean isHoe(org.bukkit.Material mat) {
-        return mat == org.bukkit.Material.WOODEN_HOE || mat == org.bukkit.Material.STONE_HOE
-                || mat == org.bukkit.Material.IRON_HOE || mat == org.bukkit.Material.GOLDEN_HOE
-                || mat == org.bukkit.Material.DIAMOND_HOE || mat == org.bukkit.Material.NETHERITE_HOE;
-    }
 }

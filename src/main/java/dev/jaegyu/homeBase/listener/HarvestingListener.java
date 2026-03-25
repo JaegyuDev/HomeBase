@@ -42,7 +42,7 @@ public class HarvestingListener implements Listener {
         Player player = event.getPlayer();
         ItemStack tool = player.getInventory().getItemInMainHand();
 
-        if (!isHoe(tool.getType())) return;
+        if (!HarvestingEnchant.isHoe(tool.getType())) return;
 
         int level = HarvestingEnchant.getLevel(tool);
         if (level <= 0) return;
@@ -61,11 +61,5 @@ public class HarvestingListener implements Listener {
                 block.getWorld().dropItemNaturally(block.getLocation(), drop.clone());
             }
         }
-    }
-
-    private boolean isHoe(Material mat) {
-        return mat == Material.WOODEN_HOE || mat == Material.STONE_HOE
-                || mat == Material.IRON_HOE || mat == Material.GOLDEN_HOE
-                || mat == Material.DIAMOND_HOE || mat == Material.NETHERITE_HOE;
     }
 }
