@@ -1,55 +1,50 @@
 package dev.jaegyu.homeBase.listener;
 
 import dev.jaegyu.homeBase.ConfigManager;
-import dev.jaegyu.homeBase.enchantments.HarvestingEnchant;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Repairable;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class AnvilListener implements Listener {
+
     private final ConfigManager configManager;
+
+    // Tracks how much leather was consumed for the last elytra repair preview,
+    // keyed by player UUID. Cleared when the result is taken or the inventory closes.
+    private final Map<UUID, Integer> pendingLeatherCost = new HashMap<>();
 
     public AnvilListener(ConfigManager configManager) {
         this.configManager = configManager;
     }
 
+    /**
+     * Clamps the stored repair penalty on any item coming out of the anvil.
+     * Prevents "Too Expensive!" from blocking legitimate repairs.
+     */
     @EventHandler
-    public void onPrepareAnvil(PrepareAnvilEvent event) {
-        if (!configManager.isHarvestingEnabled()) return;
+    public void onAnvilRepairCost(PrepareAnvilEvent event) {
+        var result = event.getResult();
+        if (result == null) return;
 
-        AnvilInventory inv = event.getInventory();
-        ItemStack left = inv.getItem(0);   // tool
-        ItemStack right = inv.getItem(1);  // book
+        var meta = result.getItemMeta();
+        if (!(meta instanceof Repairable repairable)) return;
 
-        if (left == null || right == null) return;
-        if (!HarvestingEnchant.isHoe(left.getType())) return;
-        if (right.getType() != Material.ENCHANTED_BOOK) return;
-
-        int bookLevel = HarvestingEnchant.getLevel(right);
-        if (bookLevel == 0) return;
-
-        int toolLevel = HarvestingEnchant.getLevel(left);
-
-        // Same level + same level = upgrade (up to max), otherwise take the higher
-        int resultLevel;
-        if (toolLevel == bookLevel && toolLevel < HarvestingEnchant.MAX_LEVEL) {
-            resultLevel = toolLevel + 1;
-        } else {
-            resultLevel = Math.min(Math.max(toolLevel, bookLevel), HarvestingEnchant.MAX_LEVEL);
+        if (repairable.getRepairCost() > 40) {
+            repairable.setRepairCost(40);
+            result.setItemMeta(meta);
+            event.setResult(result);
+            event.getView().setRepairCost(40);
         }
-
-        // If nothing would change, don't interfere
-        if (resultLevel == toolLevel) return;
-
-        ItemStack result = left.clone();
-        HarvestingEnchant.setLevel(result, resultLevel);
-
-        event.setResult(result);
-
-        // Set a repair cost so the anvil charges levels
-        inv.setRepairCost(bookLevel * 3);
     }
 }

@@ -4,7 +4,6 @@ import dev.jaegyu.homeBase.ConfigManager;
 import dev.jaegyu.homeBase.enchantments.HarvestingEnchant;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,7 +19,6 @@ public class HarvestingListener implements Listener {
     private static final Random RANDOM = new Random();
     private final ConfigManager configManager;
 
-    // All blocks that are "harvested" with a hoe
     private static final java.util.Set<Material> HOE_BLOCKS = java.util.Set.of(
             Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.BEETROOTS,
             Material.NETHER_WART, Material.COCOA, Material.SWEET_BERRY_BUSH,
@@ -42,24 +40,27 @@ public class HarvestingListener implements Listener {
         Player player = event.getPlayer();
         ItemStack tool = player.getInventory().getItemInMainHand();
 
-        if (!HarvestingEnchant.isHoe(tool.getType())) return;
+        if (!isHoe(tool.getType())) return;
 
-        int level = HarvestingEnchant.getLevel(tool);
+        int level = tool.getEnchantmentLevel(HarvestingEnchant.get());
         if (level <= 0) return;
 
         Block block = event.getBlock();
         if (!HOE_BLOCKS.contains(block.getType())) return;
 
-        double bonusChance = HarvestingEnchant.BONUS_PER_LEVEL * level; // e.g. 0.25 at level 2
+        double bonusChance = HarvestingEnchant.BONUS_PER_LEVEL * level;
 
-        // Get what the block would naturally drop
         Collection<ItemStack> drops = block.getDrops(tool, player);
-
-        // For each drop, give a chance at a bonus copy
         for (ItemStack drop : drops) {
             if (RANDOM.nextDouble() < bonusChance) {
                 block.getWorld().dropItemNaturally(block.getLocation(), drop.clone());
             }
         }
+    }
+
+    private boolean isHoe(Material mat) {
+        return mat == Material.WOODEN_HOE || mat == Material.STONE_HOE
+                || mat == Material.IRON_HOE || mat == Material.GOLDEN_HOE
+                || mat == Material.DIAMOND_HOE || mat == Material.NETHERITE_HOE;
     }
 }

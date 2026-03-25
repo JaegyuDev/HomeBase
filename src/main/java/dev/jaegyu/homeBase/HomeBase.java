@@ -1,29 +1,25 @@
 package dev.jaegyu.homeBase;
 
 import dev.jaegyu.homeBase.commands.HbCommand;
-import dev.jaegyu.homeBase.commands.HbTabCompleter;
 import dev.jaegyu.homeBase.commands.HomeCommand;
-import dev.jaegyu.homeBase.enchantments.HarvestingEnchant;
 import dev.jaegyu.homeBase.listener.*;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class HomeBase extends JavaPlugin {
 
+    private static HomeBase instance;
+
     private final ConfigManager configManager = new ConfigManager(this);
     private final PDBackupManager backupManager = new PDBackupManager(this);
 
     @Override
     public void onEnable() {
+        instance = this;
+
         HomeCommand homeCommand = new HomeCommand(this, configManager);
-
-        getCommand("home").setExecutor(homeCommand);
-
-        var hbCommand = getCommand("hb");
-        hbCommand.setExecutor(new HbCommand(configManager, backupManager));
-        hbCommand.setTabCompleter(new HbTabCompleter(configManager, backupManager));
-
-        HarvestingEnchant.init(this);
+        registerCommand("home", "Teleports you to your respawn location", homeCommand);
+        registerCommand("hb", "HomeBase admin commands", new HbCommand(configManager, backupManager));
 
         registerListeners(
                 new DamageListener(homeCommand, configManager),
@@ -38,9 +34,8 @@ public final class HomeBase extends JavaPlugin {
         );
     }
 
-
-    public void log(String msg) {
-        this.getLogger().info(msg);
+    public static void log(String msg) {
+        instance.getLogger().info(msg);
     }
 
     @Override
@@ -53,5 +48,4 @@ public final class HomeBase extends JavaPlugin {
             getServer().getPluginManager().registerEvents(listener, this);
         }
     }
-
 }

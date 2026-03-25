@@ -1,28 +1,23 @@
-
 package dev.jaegyu.homeBase.listener;
 
 import dev.jaegyu.homeBase.ConfigManager;
 import dev.jaegyu.homeBase.enchantments.HarvestingEnchant;
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.Material;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.VillagerAcquireTradeEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantRecipe;
-import org.bukkit.Material;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-import java.util.List;
 import java.util.Random;
 
 public class VillagerTradeListener implements Listener {
 
     private static final Random RANDOM = new Random();
     private final ConfigManager configManager;
-    private final Plugin plugin;
+    private Plugin plugin;
 
     public VillagerTradeListener(Plugin plugin, ConfigManager configManager) {
         this.configManager = configManager;
@@ -44,7 +39,7 @@ public class VillagerTradeListener implements Listener {
 
         // Build the enchanted book
         ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
-        HarvestingEnchant.setLevel(book, level);
+        book.addUnsafeEnchantment(HarvestingEnchant.get(), level);
 
         // Price scales with level: 10/15/20/25 emeralds
         int emeraldCost = 5 + (level * 5);

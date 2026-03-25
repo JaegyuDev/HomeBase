@@ -1,21 +1,19 @@
 package dev.jaegyu.homeBase.commands;
 
 import dev.jaegyu.homeBase.ConfigManager;
+import io.papermc.paper.command.brigadier.BasicCommand;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class HomeCommand implements CommandExecutor {
+public class HomeCommand implements BasicCommand {
 
     /*  This was added because I got bored walking back from little excursions.
      *  This needs abuse protection and a cost/cd.
@@ -33,22 +31,22 @@ public class HomeCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+    public void execute(CommandSourceStack stack, String[] args) {
         if (!configManager.isHomebaseEnabled()) {
-            sender.sendMessage("The home command is currently disabled.");
-            return true;
+            stack.getSender().sendMessage("The home command is currently disabled.");
+            return;
         }
 
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage("You cannot call this command as console!");
-            return false;
+        if (!(stack.getSender() instanceof Player player)) {
+            stack.getSender().sendMessage("You cannot call this command as console!");
+            return;
         }
 
         Location respawn = player.getRespawnLocation();
         if (respawn == null) {
-            sender.sendMessage("Cannot obtain your respawn location :(!");
-            sender.sendMessage("Make sure you've slept in a bed or used a respawn anchor!");
-            return true;
+            player.sendMessage("Cannot obtain your respawn location :(!");
+            player.sendMessage("Make sure you've slept in a bed or used a respawn anchor!");
+            return;
         }
 
         UUID uuid = player.getUniqueId();
@@ -62,17 +60,14 @@ public class HomeCommand implements CommandExecutor {
 
         BukkitTask task = Bukkit.getScheduler().runTaskLater(plugin, () -> {
             pendingTeleports.remove(uuid);
-
             if (!player.isOnline()) return;
-
             boolean success = player.teleport(respawn);
             if (!success) {
-                sender.sendMessage("Failed to teleport you? :/");
+                player.sendMessage("Failed to teleport you? :/");
             }
         }, 60L); // 3 seconds
 
         pendingTeleports.put(uuid, task);
-        return true;
     }
 
     public Map<UUID, BukkitTask> getPendingTeleports() {
