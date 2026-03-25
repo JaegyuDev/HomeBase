@@ -30,7 +30,8 @@ public final class HomeBase extends JavaPlugin {
                 new HarvestingListener(configManager),
                 new EnchantTableListener(configManager),
                 new AnvilListener(configManager),
-                new ArmorStandListener(this)
+                new ArmorStandListener(this),
+                new MigrationsListener()
         );
     }
 
