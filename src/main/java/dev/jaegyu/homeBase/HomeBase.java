@@ -31,6 +31,7 @@ public final class HomeBase extends JavaPlugin {
                 new EnchantTableListener(configManager),
                 new AnvilListener(configManager),
                 new ArmorStandListener(this),
+                // new HeartFireworkListener(this, configManager),
                 new MigrationsListener()
         );
     }

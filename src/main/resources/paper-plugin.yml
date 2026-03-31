@@ -1,8 +1,8 @@
 name: HomeBase
-version: '1.3-SNAPSHOT'
+version: '1.4-SNAPSHOT'
 main: dev.jaegyu.homeBase.HomeBase
 description: HomeBase plugin
 api-version: '1.21'
 authors: [ JaegyuDev ]
-website: https://github.com/JaegyuDev/LazyLoader
+website: https://github.com/JaegyuDev/Homebase
 bootstrapper: dev.jaegyu.homeBase.HomeBaseBootstrap

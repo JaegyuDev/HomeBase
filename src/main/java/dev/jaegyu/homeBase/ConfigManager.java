@@ -62,6 +62,15 @@ public class ConfigManager {
         return config.getOrElse("features.commands.homebase", true);
     }
 
+    // features.misc
+    public boolean isHeartFireworkEnabled() {
+        return config.getOrElse("features.misc.heart_firework", true);
+    }
+    
+    public boolean isAnvilXPCapped() {
+        return config.getOrElse("features.misc.anvil_xp_capped", true);
+    }
+
     public void close() {
         config.close();
     }
