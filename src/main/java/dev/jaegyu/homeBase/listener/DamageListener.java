@@ -1,11 +1,14 @@
 package dev.jaegyu.homeBase.listener;
 
 import dev.jaegyu.homeBase.ConfigManager;
+import dev.jaegyu.homeBase.HomeBase;
 import dev.jaegyu.homeBase.commands.HomeCommand;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.scheduler.BukkitTask;
@@ -57,5 +60,17 @@ public class DamageListener implements Listener {
 
         if (!(event.getEntity() instanceof Creeper)) return;
         event.blockList().clear();
+    }
+
+    @EventHandler
+    public void onTntMinecartExplode(EntityExplodeEvent event) {
+        if (!configManager.isTntMinecartGriefingDisabled()) return;
+        if (!(event.getEntity() instanceof org.bukkit.entity.minecart.ExplosiveMinecart)) return;
+        event.blockList().clear();
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR )
+    public void debugPlayerExplosionDamage(EntityDamageByEntityEvent event) {
+        HomeBase.log("Player damaged: cause=" + event.getCause() + " cancelled=" + event.isCancelled());
     }
 }

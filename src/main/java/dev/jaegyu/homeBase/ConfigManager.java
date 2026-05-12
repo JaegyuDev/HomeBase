@@ -44,6 +44,10 @@ public class ConfigManager {
         return config.getOrElse("features.mobs.return_to_sender_loot", true);
     }
 
+    public boolean isTntMinecartGriefingDisabled() {
+        return config.getOrElse("features.mobs.disable_tnt_minecart_griefing", true);
+    }
+
     // features.backup
     public boolean isBackupEnabled() {
         return config.getOrElse("features.backup.enabled", true);
@@ -70,6 +74,7 @@ public class ConfigManager {
     public boolean isAnvilXPCapped() {
         return config.getOrElse("features.misc.anvil_xp_capped", true);
     }
+
 
     public void close() {
         config.close();

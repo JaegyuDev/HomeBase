@@ -5,6 +5,7 @@ harvesting = true
 disable_creeper_griefing = true
 creeper_fire_ignite = true
 return_to_sender_loot = true
+disable_tnt_minecart_griefing = true
 
 [features.backup]
 enabled = true
